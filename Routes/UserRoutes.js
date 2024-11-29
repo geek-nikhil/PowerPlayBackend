@@ -6,9 +6,9 @@ const csvWriter = require("fast-csv");
 const tempCsvFilePath = path.join(__dirname, "temp.csv");
 const csvStream = csvWriter.format({ headers: true });
 const writableStream = fs.createWriteStream(tempCsvFilePath);
-const filePath = path.join(__dirname, "hourly.csv");
+const filePath = path.join(__dirname, "horly.csv");
 const tempFilePath = path.join(__dirname, "temp.csv"); // Temporary file path is now 'temp'
-const hourlyCsvFilePath = path.join(__dirname, "hourly.csv");
+const hourlyCsvFilePath = path.join(__dirname, "horly.csv");
 
 
 
@@ -136,24 +136,24 @@ function isWeekend(dateInput) {
 
 // weather()
 async function weather() {
-  // const repsonse = await fetch(
-  //     "https://api.tomorrow.io/v4/weather/forecast?location=28.7041,77.1025&apikey=sYrvaEUlrj2otGRceud1PwDVPhGv4KzO"
-  // );
-  // const data = await repsonse.json();
-  // const hourlyData = data.timelines.hourly;
+  const repsonse = await fetch(
+      "https://api.tomorrow.io/v4/weather/forecast?location=28.7041,77.1025&apikey=sYrvaEUlrj2otGRceud1PwDVPhGv4KzO"
+  );
+  const data = await repsonse.json();
+  const hourlyData = data.timelines.hourly;
 
-  // const temperatures = [];
-  //   for(let i=0;i<24;i++){
-  //     temperatures[i] = hourlyData[i].values.temperature;
-  // }
-  const temperatures = [
-    14.13, 15.32, 14.59, 13.99,
-     13.2, 12.75, 12.36, 11.93,
-    12.02,  14.1,  17.1, 20.13,
-    22.27, 23.59, 24.37, 24.73,
-    24.41, 23.59, 22.08, 20.85,
-    19.69, 18.78, 17.91, 17.21
-  ]
+  const temperatures = [];
+    for(let i=0;i<24;i++){
+      temperatures[i] = hourlyData[i].values.temperature;
+  }
+  // const temperatures = [
+  //   14.13, 15.32, 14.59, 13.99,
+  //    13.2, 12.75, 12.36, 11.93,
+  //   12.02,  14.1,  17.1, 20.13,
+  //   22.27, 23.59, 24.37, 24.73,
+  //   24.41, 23.59, 22.08, 20.85,
+  //   19.69, 18.78, 17.91, 17.21
+  // ]
   return temperatures;
 }
 async function readDelhi() {
@@ -279,7 +279,7 @@ async function getdetails(prevconsumptions) {
     prevconsumptions.push(prediction.prediction_demand);
     prevconsumptions.shift()
     // console.log(prediction);
-    // console.log(prevconsumptions) 
+    // console.log(prevconsumptions)
   }
   saveToTempFile(rows);
   // appendDataToTempFile(rows);
@@ -472,7 +472,7 @@ setInterval(async () => {
   // } catch (error) {
   //   console.error('Error fetching last three rows:', error);
   // }
-}, 3600000); // Executes every 5 seconds
+}, 20000); // Executes every 5 seconds
 
 
 router.get("/temp-data", (req, res) => {
