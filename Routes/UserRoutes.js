@@ -472,7 +472,7 @@ setInterval(async () => {
   // } catch (error) {
   //   console.error('Error fetching last three rows:', error);
   // }
-}, 20000); // Executes every 5 seconds
+}, 3600000); // Executes every 5 seconds
 
 
 router.get("/temp-data", (req, res) => {
