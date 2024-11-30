@@ -136,24 +136,24 @@ function isWeekend(dateInput) {
 
 // weather()
 async function weather() {
-  const repsonse = await fetch(
-      "https://api.tomorrow.io/v4/weather/forecast?location=28.7041,77.1025&apikey=KCskAGYmJvGmqR6MZWU3RQbs0VBKL7dK"
-  );
-  const data = await repsonse.json();
-  const hourlyData = data.timelines.hourly;
+  // const repsonse = await fetch(
+  //     "https://api.tomorrow.io/v4/weather/forecast?location=28.7041,77.1025&apikey=KCskAGYmJvGmqR6MZWU3RQbs0VBKL7dK"
+  // );
+  // const data = await repsonse.json();
+  // const hourlyData = data.timelines.hourly;
 
-  const temperatures = [];
-    for(let i=0;i<24;i++){
-      temperatures[i] = hourlyData[i].values.temperature;
-  }
-  // const temperatures = [
-  //   14.13, 15.32, 14.59, 13.99,
-  //    13.2, 12.75, 12.36, 11.93,
-  //   12.02,  14.1,  17.1, 20.13,
-  //   22.27, 23.59, 24.37, 24.73,
-  //   24.41, 23.59, 22.08, 20.85,
-  //   19.69, 18.78, 17.91, 17.21
-  // ]
+  // const temperatures = [];
+  //   for(let i=0;i<24;i++){
+  //     temperatures[i] = hourlyData[i].values.temperature;
+  // }
+  const temperatures = [
+    14.13, 15.32, 14.59, 13.99,
+     13.2, 12.75, 12.36, 11.93,
+    12.02,  14.1,  17.1, 20.13,
+    22.27, 23.59, 24.37, 24.73,
+    24.41, 23.59, 22.08, 20.85,
+    19.69, 18.78, 17.91, 17.21
+  ]
   return temperatures;
 }
 async function readDelhi() {
@@ -439,8 +439,6 @@ setInterval(async () => {
   //       .then((result) => {
   //           moveFirstRowToHourly();
   //     })
-
-
    Promise.resolve(weather())
   .then((data) => {
     // Assign the fetched temperatures to the outer array
@@ -474,7 +472,44 @@ setInterval(async () => {
   // }
 }, 3600000); // Executes every 5 seconds
 
+async function reboot() {
+  Promise.resolve(weather())
+ .then((data) => {
+   // Assign the fetched temperatures to the outer array
+   temperatures = data;
+   console.log('Temperatures:', temperatures);
 
+//     // Now, resolve the prevconsumption() and work with its data.
+   return Promise.resolve(readLastThreeRows(hourlyCsvFilePath));
+     })
+   .then((prevconsump) => {
+   // Process the previous consumption data to extract electricity demand
+ console.log('Previous Consumption:', prevconsump);
+   const prevconsumptions = prevconsump.map((data) => data.electricity_demand);
+//     console.log('Previous Consumption:', prevconsumptions);
+//     // Now resolve getdetails() with the electricity consumption data
+   return Promise.resolve(getdetails(prevconsumptions));
+ })
+ .then((data) => {
+//     console.log(data);
+//     // Now, you can use both temperatures and prevconsumptions as needed.
+//     // Example: Call the function that moves the first row to hourly.
+   moveFirstRowToHourly();
+ })
+ .catch((error) => {
+   // Handle any error that might occur
+   console.error("Error occurred:", error);
+ });
+}
+ // } catch (error) {
+ //   console.error('Error fetching last three rows:', error);
+ // }
+ reboot();
+
+router.get("/reboot", (req, res) => {
+  reboot();
+  res.status(200).json({ message: "Reboot initiated" });
+});
 router.get("/temp-data", (req, res) => {
   const results = [];
 
