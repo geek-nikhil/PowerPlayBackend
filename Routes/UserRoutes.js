@@ -137,7 +137,7 @@ function isWeekend(dateInput) {
 // weather()
 async function weather() {
   const repsonse = await fetch(
-      "https://api.tomorrow.io/v4/weather/forecast?location=28.7041,77.1025&apikey=sYrvaEUlrj2otGRceud1PwDVPhGv4KzO"
+      "https://api.tomorrow.io/v4/weather/forecast?location=28.7041,77.1025&apikey=KCskAGYmJvGmqR6MZWU3RQbs0VBKL7dK"
   );
   const data = await repsonse.json();
   const hourlyData = data.timelines.hourly;
